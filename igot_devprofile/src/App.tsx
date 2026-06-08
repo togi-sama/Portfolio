@@ -1,4 +1,7 @@
 import { motion, MotionConfig } from 'motion/react'
+import Particles, { ParticlesProvider } from '@tsparticles/react'
+import type { Engine, ISourceOptions } from '@tsparticles/engine'
+import { loadSlim } from '@tsparticles/slim'
 import { FaDatabase, FaLinkedin } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 import {
@@ -18,16 +21,99 @@ import {
 import { TbBrandCSharp } from 'react-icons/tb'
 import profileImg from './assets/igot_profile.jpg'
 
+const initParticles = async (engine: Engine) => {
+  await loadSlim(engine)
+}
+
+const particleOptions: ISourceOptions = {
+  background: {
+    color: {
+      value: 'transparent',
+    },
+  },
+  detectRetina: true,
+  fpsLimit: 60,
+  fullScreen: {
+    enable: false,
+  },
+  interactivity: {
+    events: {
+      onHover: {
+        enable: true,
+        mode: 'grab',
+      },
+      resize: {
+        enable: true,
+      },
+    },
+    modes: {
+      grab: {
+        distance: 150,
+        links: {
+          opacity: 0.28,
+        },
+      },
+    },
+  },
+  particles: {
+    color: {
+      value: ['#f7f2f2', '#dc2626', '#b91c1c'],
+    },
+    links: {
+      color: '#b91c1c',
+      distance: 150,
+      enable: true,
+      opacity: 0.2,
+      width: 1,
+    },
+    move: {
+      direction: 'none',
+      enable: true,
+      outModes: {
+        default: 'bounce',
+      },
+      random: true,
+      speed: 0.55,
+      straight: false,
+    },
+    number: {
+      density: {
+        enable: true,
+        width: 950,
+        height: 950,
+      },
+      value: 58,
+    },
+    opacity: {
+      value: {
+        min: 0.16,
+        max: 0.5,
+      },
+    },
+    shape: {
+      type: 'circle',
+    },
+    size: {
+      value: {
+        min: 1,
+        max: 3,
+      },
+    },
+  },
+}
+
 const projects = [
   {
     title: 'Project Manager',
     tag: 'Full-stack',
+    href: 'https://github.com/togi-sama/Project-Manager',
     description:
       'A project management web app for tracking software ideas and ongoing projects, with CRUD workflows and account image persistence.',
   },
   {
     title: 'Crowdlens',
     tag: 'Full-stack',
+    href: 'https://github.com/togi-sama/Crowdlens',
     description:
       'A public-space foot traffic monitoring application with a C# backend, TypeScript/CSS frontend, SQLite database, and ML-based crowd prediction.',
   },
@@ -71,9 +157,15 @@ const stats = [
 function App() {
   return (
     <MotionConfig reducedMotion="user">
-    <main className="min-h-screen bg-base-300 text-base-content" data-theme="igotdark">
+    <ParticlesProvider init={initParticles}>
+    <main className="relative isolate min-h-screen overflow-hidden bg-base-300 text-base-content" data-theme="igotdark">
+      <Particles
+        id="portfolio-particles"
+        className="pointer-events-none fixed inset-0 z-0"
+        options={particleOptions}
+      />
       <section
-        className="flex min-h-screen items-center justify-center px-4 py-10"
+        className="relative z-10 flex min-h-screen items-center justify-center px-4 py-10"
         aria-labelledby="profile-title"
       >
         <motion.div
@@ -187,7 +279,7 @@ function App() {
       </section>
 
       <motion.section
-        className="mx-auto max-w-6xl px-4 py-16 text-center"
+        className="relative z-10 mx-auto max-w-6xl px-4 py-16 text-center"
         id="projects"
         aria-labelledby="projects-title"
         initial={{ opacity: 0, y: 36 }}
@@ -202,10 +294,16 @@ function App() {
           </h2>
         </div>
         <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {projects.map((project, index) => (
-            <motion.article
+          {projects.map((project, index) => {
+            const CardElement = 'href' in project ? motion.a : motion.article
+
+            return (
+            <CardElement
               className="card border border-primary/20 bg-base-100 text-left shadow-xl"
+              href={'href' in project ? project.href : undefined}
               key={project.title}
+              rel={'href' in project ? 'noreferrer' : undefined}
+              target={'href' in project ? '_blank' : undefined}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.25 }}
@@ -217,13 +315,14 @@ function App() {
                 <h3 className="card-title">{project.title}</h3>
                 <p className="text-base-content/70">{project.description}</p>
               </div>
-            </motion.article>
-          ))}
+            </CardElement>
+            )
+          })}
         </div>
       </motion.section>
 
       <motion.section
-        className="mx-auto grid max-w-6xl gap-8 px-4 py-16 lg:grid-cols-[0.85fr_1.15fr]"
+        className="relative z-10 mx-auto grid max-w-6xl gap-8 px-4 py-16 lg:grid-cols-[0.85fr_1.15fr]"
         aria-labelledby="skills-title"
         initial={{ opacity: 0, y: 36 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -302,7 +401,7 @@ function App() {
       </motion.section>
 
       <motion.section
-        className="mx-auto max-w-6xl px-4 py-16"
+        className="relative z-10 mx-auto max-w-6xl px-4 py-16"
         id="contact-content"
         aria-labelledby="contact-title"
         initial={{ opacity: 0, y: 36 }}
@@ -363,6 +462,7 @@ function App() {
       </motion.section>
 
     </main>
+    </ParticlesProvider>
     </MotionConfig>
   )
 }

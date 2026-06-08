@@ -66,6 +66,12 @@ body {
   min-height: 100vh;
 }
 
+#portfolio-particles,
+#portfolio-particles canvas {
+  height: 100%;
+  width: 100%;
+}
+
 @keyframes page-in {
   from {
     opacity: 0;
