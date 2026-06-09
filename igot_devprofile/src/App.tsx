@@ -2,7 +2,7 @@ import { motion, MotionConfig } from 'motion/react'
 import Particles, { ParticlesProvider } from '@tsparticles/react'
 import type { Engine, ISourceOptions } from '@tsparticles/engine'
 import { loadSlim } from '@tsparticles/slim'
-import { FaDatabase, FaLinkedin } from 'react-icons/fa6'
+import { FaDatabase, FaLinkedin, FaUser } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 import {
   SiC,
@@ -242,8 +242,8 @@ function App() {
                 <div className="card-body gap-5 p-5">
                   <div className="flex flex-col items-center gap-4 sm:flex-row sm:text-left">
                     <div className="avatar">
-                      <div className="w-20 rounded-box ring-2 ring-primary ring-offset-2 ring-offset-base-200">
-                        <img src={profileImg} alt="Jecenel Khen B. Igot" />
+                      <div className="flex size-20 items-center justify-center rounded-box bg-primary/10 text-primary ring-2 ring-primary ring-offset-2 ring-offset-base-200">
+                        <FaUser className="size-9" aria-hidden="true" />
                       </div>
                     </div>
                     <div>
